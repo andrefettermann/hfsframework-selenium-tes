@@ -20,32 +20,40 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 
 /**
- * Base page.
- * @author andre.fettermann - TRT1/DISAD
+ * Template de pagina de edicao de dados.
+ * @author andre.fettermann - TRT1/STI/CSIS/DISAD
  */
 public abstract class EditPage {
 
 	public WebDriver driver;
 	
 	@FindBy(how = How.ID, using = "messages")
-	protected WebElement messages;
+	protected WebElement mensagens;
 
 	@FindBy(how = How.ID, using = "primefacesmessagedlg")
-	private WebElement dialog;
+	private WebElement alerta;
 
 	public EditPage(WebDriver driver) {
 		this.driver = driver;
 	}
 	
-    public String getTitle() {
+	/**
+	 * Retorna o titulo exibido na barra do navegador.
+	 * @return o texto do titulo.
+	 */
+    public String obtemTituloPagina() {
     	return driver.getTitle().replaceAll("\u00A0", " ");
     }
     
-	public List<String> getMessages() {
+    /**
+     * Retorna as mensagens exibidas na pagina.
+     * @return lista com os textos das mensagens.
+     */
+	public List<String> obtemMensagensExibidasPagina() {
 		try {
 			new WebDriverWait(driver, Duration.ofSeconds(2))
-				.until(ExpectedConditions.visibilityOf(messages));
-			String[] lines = messages.getText().split("\\r?\\n|\\r");
+				.until(ExpectedConditions.visibilityOf(mensagens));
+			String[] lines = mensagens.getText().split("\\r?\\n|\\r");
 			return Arrays.asList(lines);
 					//mensagens.getText();
 		} catch (NoSuchElementException e) {
@@ -53,42 +61,34 @@ public abstract class EditPage {
 		}
 	}
 
-	public boolean isMessagePresent(String mensagem) {
-		return getMessages().contains(mensagem);
-	}
-	
+	/**
+	 * Tira um print da pagina.
+	 * @return o print da pagina.
+	 */
 	public byte[] takeScreenShot() {
 		final byte[] screenshot = 
 				((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
 		return screenshot;
 	}
 
-	public boolean isAlertPresent(String mensagemDesejada) {
-		new WebDriverWait(driver, Duration.ofSeconds(2))
-			.until(ExpectedConditions.visibilityOf(dialog));
-		
-		String mensagemObtida = driver.findElement(
-					By.xpath(
-						"//div[@id='primefacesmessagedlg']/div[2]")).getText();		
-		
-		driver.findElement(
-				By.xpath("//div[@id='primefacesmessagedlg']/div/a")).click();
-		
-		if (mensagemDesejada.equals(mensagemObtida)) {
-			return true;
-		}
-		return false;
+	/**
+	 * Retorna o conteu do campo.
+	 * @param elemento o elemento da pagina.
+	 * @return o texto do atributo "value".
+	 */
+	public String obtemConteudoCampo(WebElement elemento) {
+		return elemento.getAttribute("value");
 	}
 
-
-	public String getElementValue(WebElement element) {
-		return element.getAttribute("value");
-	}
-
-    public void setElementText(WebElement element, String texto) {
+	/**
+	 * Preenche o conteudo de um campo.
+	 * @param elemento o elemento da pagina.
+	 * @param texto o valor a ser preenchido no campo.
+	 */
+    public void preencheCampo(WebElement elemento, String texto) {
     	if (texto == null) texto = "";
-    	element.clear();
-    	element.sendKeys(texto);
+    	elemento.clear();
+    	elemento.sendKeys(texto);
     }
     
 	public boolean isElementPresent(By by) {
@@ -100,9 +100,9 @@ public abstract class EditPage {
 		}
 	}
 	
-	public abstract void save();
+	public abstract void grava();
 	
-	public abstract void cancel();
+	public abstract void cancela();
 	
 	protected void clickButton(WebElement element) {
 		element.click();

@@ -135,7 +135,7 @@ public abstract class ListPage {
 		driver.findElement(By.linkText("Sair")).click();
 	}
 
-    public String getTotalExibidos(WebElement element) {
+    public String getTableTotalDisplayed(WebElement element) {
     	String texto = element.getText();
     	String total = texto.substring(texto.indexOf('(')
     			, texto.indexOf(')')+1);
