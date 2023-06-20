@@ -35,21 +35,44 @@ public abstract class ListPage {
 	protected WebElement messages;
 
 	@FindBy(how = How.ID, using = "primefacesmessagedlg")
-	private WebElement dialog;
+	private WebElement caixaDialogo;
 
 	public ListPage(WebDriver driver) {
 		this.driver = driver;
 	}
 	
-	public abstract void open();
+	public abstract void abre();
 	
-	public abstract void open(String url);
-
-    public String getTitle() {
+	/**
+	 * Obtem o titulo exibido no navegador.
+	 * @return o texto com o titulo.
+	 */
+    public String obtemTituloPagina() {
     	return driver.getTitle().replaceAll("\u00A0", " ");
     }
     
-	public List<String> getMessages() {
+    /**
+     * Obtem o total de mensagens exibidas.
+     * @return o total de mensagens exibidas.
+     */
+    public int obtemTotalMensagensExibidas() {
+    	return obtemMensagensExibidas().size();
+    }
+    
+    /**
+     * Verifica se a mensagem foi exibida.
+     * @param mensagem a mensagem.
+     * @return true se foi exibida e false se nao foi exibida.
+     */
+    public boolean isMensagemExibida(String mensagem) {
+    	return obtemMensagensExibidas().contains(mensagem);
+    }
+    
+    /**
+     * Obtem as mensagens exibidas na pagina.
+     * @return lista com o texto das mensagens exibidas.
+     */
+	public List<String> obtemMensagensExibidas() {
 		try {
 			new WebDriverWait(driver, Duration.ofSeconds(2))
 				.until(ExpectedConditions.visibilityOf(messages));
@@ -61,52 +84,49 @@ public abstract class ListPage {
 		}
 	}
 
-	public boolean isMessagePresent(String mensagem) {
-		return getMessages().contains(mensagem);
-	}
-	
+	/**
+	 * Tira um print screen da tela.
+	 * @return o print screen da tela.
+	 */
 	public byte[] takeScreenShot() {
 		final byte[] screenshot = 
 				((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
 		return screenshot;
 	}
 
-	public boolean isAlertPresent(String mensagemDesejada) {
+	/**
+	 * Obtem a mensagem exibida na caixa de dialogo e fecha a caixa de dialogo.
+	 * @return o texto da mensagem exibida.
+	 */
+	public String obtemMensagemCaixaDialogo() {
 		new WebDriverWait(driver, Duration.ofSeconds(2))
-			.until(ExpectedConditions.visibilityOf(dialog));
-		
-		String mensagemObtida = driver.findElement(
-					By.xpath(
-						"//div[@id='primefacesmessagedlg']/div[2]")).getText();		
-		
-		driver.findElement(
-				By.xpath("//div[@id='primefacesmessagedlg']/div/a")).click();
-		
-		if (mensagemDesejada.equals(mensagemObtida)) {
-			return true;
-		}
-		return false;
-	}
+		.until(ExpectedConditions.visibilityOf(caixaDialogo));
 	
-	public String getDialogMessage() {
-		new WebDriverWait(driver, Duration.ofSeconds(2))
-		.until(ExpectedConditions.visibilityOf(dialog));
-	
-		String message = driver.findElement(
+		String mensagem = driver.findElement(
 				By.xpath(
 					"//div[@id='primefacesmessagedlg']/div[2]")).getText();		
 		driver.findElement(
 				By.xpath("//div[@id='primefacesmessagedlg']/div/a")).click();
-		return message;
+		return mensagem;
 	}
 
-	public String getElementValue(WebElement element) {
-		return element.getAttribute("value");
+	/**
+	 * Obtem o conteudo do campo.
+	 * @param elemento o campo
+	 * @returnum texto com o conteudo do campo.
+	 */
+	protected String obtemConteudoCampo(WebElement elemento) {
+		return elemento.getAttribute("value");
 	}
 
-    public void setElementText(WebElement element, String texto) {
-    	element.clear();
-    	element.sendKeys(texto);
+	/**
+	 * Preenche o campo.
+	 * @param elemento o campo.
+	 * @param valor o texto a ser preenchido no campo.
+	 */
+    protected void preencheCampo(WebElement elemento, String valor) {
+    	elemento.clear();
+    	elemento.sendKeys(valor);
     }
     
 	public boolean isElementPresent(By by) {
@@ -118,58 +138,119 @@ public abstract class ListPage {
 		}
 	}
 
-	public boolean isMenuItemAvailable(String menu) {
-		return isElementPresent(By.linkText(menu));
+	/**
+	 * Verifica se o item de menu esta disponivel na pagina
+	 * @param valor o label do item de menu.
+	 * @return verdadeiro se estiver e falso se nao estiver.
+	 */
+	public boolean isMenuItemAvailable(String valor) {
+		return isElementPresent(By.linkText(valor));
 	}
 	
-	public void clickMenu(String menu) {
-		driver.findElement(By.linkText(menu)).click();
+	/**
+	 * Clica no menu.
+	 * @param valor o label do item do menu.
+	 */
+	public void clicaMenu(String valor) {
+		driver.findElement(By.linkText(valor)).click();
 	}
 
-	public void clickButton(WebElement element) {
-		element.click();
+	/**
+	 * Clica no elemento e aguarda 1 segundo.
+	 * @param elemento o elemento a ser clicado.
+	 */
+	protected void clica(WebElement elemento) {
+		elemento.click();
 		Selenium.pausa(1000L);
 	}
 
-	public void exit() {
+	/**
+	 * Sai do sistema clicando em "Sair" no menu superior.
+	 */
+	public void sair() {
 		driver.findElement(By.linkText("Sair")).click();
 	}
 
-    public String getTableTotalDisplayed(WebElement element) {
-    	String texto = element.getText();
+	/**
+	 * Obtem o total de registros carregados a partir do valor exibido
+	 * no paginador da tabela.
+	 * @param paginador o paginador da tabela.
+	 * @return o total exibido.
+	 */
+    protected String obtemTotalRegistrosTabela(WebElement paginador) {
+    	String texto = paginador.getText();
     	String total = texto.substring(texto.indexOf('(')
     			, texto.indexOf(')')+1);
     	
-    	String[] valorTotal = total.split(" ");
+    	String[] valor = total.split(" ");
     	
-		return valorTotal[4];
+		return valor[4];
 	}
 
-	protected void filterTableByColumn(WebElement element, String value) {
-		element.sendKeys(value);
+    /**
+     * Preenche o campo do cabecalho da coluna da tabela para filtrar os dados 
+     * e aguarda 1 segundo.
+     * @param coluna o cmapo da coluna da tabela.
+     * @param valor o valor a ser filtrado.
+     */
+	protected void preencheCabecalhoColunaTabela(WebElement coluna, String valor) {
+		coluna.sendKeys(valor);
+		Selenium.pausa(1000L);
 	}
 	
-	protected boolean isPDFAvailable(WebElement paginator) {
-		WebElement buttonPDF = paginator.findElement(
+	/**
+	 * Seleciona a 1 linha da tabela e aguarda 1 segundo.
+	 * @param linhas o elemento com as lonhas da tabela.
+	 */
+	protected void selecionaLinhaTabela(WebElement linhas) {
+		linhas.findElement(By.xpath("tr")).click();
+		Selenium.pausa(1000L);
+	}
+	
+	/**
+	 * Verifica se e possivel exportar para PDF os dados da tabela.
+	 * @param paginador o elemento do paginador da tabela.
+	 * @return verdadeiro se o botao estiver disponivel e falso se nao estiver.
+	 */
+	protected boolean isExportarPDFDisponivel(WebElement paginador) {
+		WebElement buttonPDF = paginador.findElement(
 				By.xpath("a[2]/img[contains(@src"
 				+ ",'/imovel/resources/img/pdf.png?pfdrid_c=true')]"));
 		return buttonPDF.isDisplayed();
 	}
 
-	public boolean isExcelAvailable(WebElement paginator) {
-		WebElement buttonExcel = paginator.findElement(
+	/**
+	 * Verifica se e possivel exportar para Excel os dados da tabela.
+	 * @param paginador o elemento do paginador da tabela.
+	 * @return verdadeiro se o botao estiver disponivel e falso se nao estiver.
+	 */
+	protected boolean isExportarExcelDisponivel(WebElement paginador) {
+		WebElement buttonExcel = paginador.findElement(
 				By.xpath("a/img[contains(@src"
 				+ ",'/imovel/resources/img/excel.png?pfdrid_c=true')]"));
 		return buttonExcel.isDisplayed();
 	}
 	
-	public boolean isTableEmpty(WebElement rows) {
-		return rows.getText().equals(NENHUM_REGISTRO_ENCONTRADO);
+	/**
+	 * Verifica se a tabela esta vazia.
+	 * @param dados o elemento com as linhas da tabela.
+	 * @return verdadeiro se foi exibido que nenhum registro foi encontrado e 
+	 * falso se nao foi exibido.
+	 */
+	protected boolean isTabelaVazia(WebElement dados) {
+		return dados.getText().equals(NENHUM_REGISTRO_ENCONTRADO);
 	}
 	
-	public boolean isFilterAndSortTableAvailable(WebElement element) {
-		return element.isDisplayed() 
-				&& element.findElement(By.xpath("../span[2][contains(@class"
+	/**
+	 * Verifica se existe o campo para informar os dados a serem filtrados e 
+	 * a seta ao lado do nome da coluna estao disponiveis.
+	 * 
+	 * @param coluna o elemento do cabecalho da coluna.
+	 * @return verdadeiro se for possivel e falso se nao for possivel.
+	 */
+	protected boolean isFiltrarOrdenarColunaDisponivel(WebElement coluna) {
+		return coluna.isDisplayed() 
+				&& coluna.findElement(By.xpath("../span[2][contains(@class"
 				+ ",'ui-sortable-column-icon ui-icon ui-icon-carat-2-n-s')]"))
 				.isDisplayed();
 	}

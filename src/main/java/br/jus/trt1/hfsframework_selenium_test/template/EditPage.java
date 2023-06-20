@@ -46,10 +46,27 @@ public abstract class EditPage {
     }
     
     /**
+     * Obtem a quantidade de mensagens exibidas.
+     * @return a quantidade.
+     */
+    public int obtemQuantidadeMensagensExibidas() {
+    	return obtemMensagensExibidas().size();
+    }
+    
+    /**
+     * Verifica se a mensagem foi exibida.
+     * @param mensagem o texto da mensagem.
+     * @return true se foi exibida e false se nao foi exibida.
+     */
+    public boolean isMensagemExibida(String mensagem) {
+    	return obtemMensagensExibidas().contains(mensagem);
+    }
+    
+    /**
      * Retorna as mensagens exibidas na pagina.
      * @return lista com os textos das mensagens.
      */
-	public List<String> obtemMensagensExibidasPagina() {
+	public List<String> obtemMensagensExibidas() {
 		try {
 			new WebDriverWait(driver, Duration.ofSeconds(2))
 				.until(ExpectedConditions.visibilityOf(mensagens));
@@ -104,7 +121,7 @@ public abstract class EditPage {
 	
 	public abstract void cancela();
 	
-	protected void clickButton(WebElement element) {
+	protected void clica(WebElement element) {
 		element.click();
 	}
 
