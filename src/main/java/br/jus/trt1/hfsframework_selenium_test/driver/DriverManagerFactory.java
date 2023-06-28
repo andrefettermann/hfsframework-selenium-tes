@@ -22,7 +22,7 @@ public class DriverManagerFactory {
 			//driverManager = new HTMLUnitDriverManager();
 			break;
 		case FIREFOX:
-			// driverManager = new FirefoxDriverManager();
+			driverManager = FirefoxDriverManager.getInstance();
 			break;
 		default:
 			// driverManager = new SafariDriverManager();

@@ -53,7 +53,8 @@ public class FirefoxDriverManager extends DriverManager {
 		DesiredCapabilities capabilities = new DesiredCapabilities();
 		
 		FirefoxOptions options = new FirefoxOptions();
-		options.setHeadless(Boolean.valueOf(System.getProperty("headless")));
+		options.addArguments("--headless");
+		//options.setHeadless(Boolean.valueOf(System.getProperty("headless")));
 		//options.addArguments("test-type");
 		//options.addArguments("--ignore-ssl-errors=yes");
 		//options.addArguments("--ignore-certificate-errors");
