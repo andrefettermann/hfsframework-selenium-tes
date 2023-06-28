@@ -180,7 +180,7 @@ public abstract class BasePage {
 	 * @return verdadeiro se o elemento estiver marcado e falso se nao estiver
 	 * marcado.
 	 */
-	public boolean isCheckBoxMarcado(WebElement checkBox) {
+	protected boolean isCheckBoxMarcado(WebElement checkBox) {
 		return checkBox.getAttribute("class").contains("ui-icon-check");
 	}
 
@@ -191,10 +191,14 @@ public abstract class BasePage {
 	 * @return verdadeiro se o elemento estiver desabilitado e falso se nao 
 	 * estiver.
 	 */
-	public boolean isCheckBoxDesabilitado(WebElement checkBox) {
+	protected boolean isCheckBoxDesabilitado(WebElement checkBox) {
 		return checkBox.getAttribute("class").contains("ui-state-disabled");
 	}
 
+	protected boolean isElementoHabilitado(WebElement elemento) {
+		return elemento.getAttribute("class").contains("ui-state-enabled");
+	}
+	
 	protected boolean isElementPresent(By by) {
 		try {
 			driver.findElement(by);

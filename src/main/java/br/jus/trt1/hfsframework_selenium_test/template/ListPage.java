@@ -11,7 +11,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import br.jus.trt1.hfsframework_selenium_test.utils.Selenium;
+import br.jus.trt1.hfsframework_selenium_test.utils.SeleniumUtils;
 
 /**
  * List page template.
@@ -52,7 +52,7 @@ public abstract class ListPage extends BasePage {
      */
 	protected void filtraTabelaPorColuna(WebElement coluna, String valor) {
 		coluna.sendKeys(valor);
-		Selenium.pausa(1000L);
+		SeleniumUtils.pausa(1000L);
 	}
 	
 	/**
@@ -61,7 +61,7 @@ public abstract class ListPage extends BasePage {
 	 */
 	protected void selecionaLinhaTabela(WebElement linhas) {
 		linhas.findElement(By.xpath("tr")).click();
-		Selenium.pausa(1000L);
+		SeleniumUtils.pausa(1000L);
 	}
 	
 	/**
@@ -82,7 +82,7 @@ public abstract class ListPage extends BasePage {
 			caixaDialogo.findElement(
 					By.xpath("div[3]/button[2]")).click();			
 		}
-		Selenium.pausa(1000L);
+		SeleniumUtils.pausa(1000L);
 	}
 
 	/**

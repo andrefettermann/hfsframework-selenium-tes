@@ -24,7 +24,7 @@ import br.jus.trt1.hfsframework_selenium_test.driver.DriverType;
  * @author andre.fettermann - TRT1/DISAD
  *
  */
-public final class Selenium {
+public final class SeleniumUtils {
 
 	private static WebDriver driver;
 	private static final Charset UTF8_CHARSET = Charset.forName("UTF-8");
