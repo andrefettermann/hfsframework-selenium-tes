@@ -72,7 +72,6 @@ public abstract class BasePage {
 				.until(ExpectedConditions.visibilityOf(mensagens));
 			String[] lines = mensagens.getText().split("\\r?\\n|\\r");
 			return Arrays.asList(lines);
-					//mensagens.getText();
 		} catch (NoSuchElementException e) {
 			return null;
 		}
@@ -118,9 +117,11 @@ public abstract class BasePage {
 	public void selecionaOpcaoComboBox(
 			WebElement comboBox, WebElement opcoes, String opcao) {
 		comboBox.click();
-    	String cssSelector = "li[data-label*='" + opcao + "']";
+
+    	String cssSelector = "li[@data-label='" + opcao + "']";
 		WebElement li = opcoes.findElement(
-				By.cssSelector(cssSelector));
+				By.xpath(cssSelector));
+				//By.cssSelector(cssSelector));
     	li.click();
 	}
 

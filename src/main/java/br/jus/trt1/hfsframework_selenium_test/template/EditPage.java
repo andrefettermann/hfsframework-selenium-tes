@@ -15,8 +15,8 @@ public abstract class EditPage extends BasePage {
 		super(driver);
 	}   
 	
-	public abstract void grava();
+	public abstract void solicitaGravar();
 	
-	public abstract void cancela();
+	public abstract void solicitaCancelar();
 	
 }

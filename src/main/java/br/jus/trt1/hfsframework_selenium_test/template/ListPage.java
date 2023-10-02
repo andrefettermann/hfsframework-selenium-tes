@@ -26,7 +26,7 @@ public abstract class ListPage extends BasePage {
 		super(driver);
 	}
 	
-	public abstract void abre();
+	public abstract void seleciona();
 	
 	/**
 	 * Obtem o total de registros carregados a partir do valor exibido
@@ -51,6 +51,7 @@ public abstract class ListPage extends BasePage {
      * @param valor o valor a ser filtrado.
      */
 	protected void filtraTabelaPorColuna(WebElement coluna, String valor) {
+		coluna.clear();
 		coluna.sendKeys(valor);
 		SeleniumUtils.pausa(1000L);
 	}
