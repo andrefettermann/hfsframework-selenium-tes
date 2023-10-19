@@ -19,6 +19,8 @@ import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import br.jus.trt1.hfsframework_selenium_test.utils.SeleniumUtils;
+
 /**
  * Template base de pagina.
  * @author andre.fettermann - TRT1/STI/CSIS/DISAD
@@ -163,6 +165,7 @@ public abstract class BasePage {
 					"//div[@id='primefacesmessagedlg']/div[2]")).getText();		
 		driver.findElement(
 				By.xpath("//div[@id='primefacesmessagedlg']/div/a")).click();
+		SeleniumUtils.pausa(1000L);
 		return mensagem;
 	}
 
