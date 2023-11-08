@@ -21,6 +21,9 @@ public abstract class ListPage extends BasePage {
 
 	public static final String NENHUM_REGISTRO_ENCONTRADO = 
 			"Nenhum registro encontrado.";
+	
+	public static final String SELECIONE = 
+			"Favor selecionar um registro da tabela para proceder esta ação.";
 
 	public ListPage(WebDriver driver) {
 		super(driver);
