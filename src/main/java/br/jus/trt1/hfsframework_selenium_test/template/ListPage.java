@@ -24,6 +24,11 @@ public abstract class ListPage extends BasePage {
 	
 	public static final String SELECIONE = 
 			"Favor selecionar um registro da tabela para proceder esta ação.";
+	
+	public static final String MENSAGEM_HA_IMOVEIS_ASSOCIADOS = 
+			"Não é possível excluir esta entidade, pois ela está associada a "
+			+ "pelo menos outra entidade.";
+
 
 	public ListPage(WebDriver driver) {
 		super(driver);
@@ -135,6 +140,11 @@ public abstract class ListPage extends BasePage {
 				&& coluna.findElement(By.xpath("../span[2][contains(@class"
 				+ ",'ui-sortable-column-icon ui-icon ui-icon-carat-2-n-s')]"))
 				.isDisplayed();
+	}
+	
+	public boolean isMensagemEntidadeAssociadaExibida() {
+		return obtemMensagemCaixaDialogo()
+				.equals(MENSAGEM_HA_IMOVEIS_ASSOCIADOS);
 	}
 	
 }
