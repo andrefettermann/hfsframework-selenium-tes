@@ -5,6 +5,8 @@ import java.io.IOException;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 
+import br.jus.trt1.hfsframework_selenium_test.utils.SeleniumUtils;
+
 public abstract class DriverManager {
 	
 	static Logger LOGGER = Logger.getLogger(DriverManager.class.getName());
@@ -21,6 +23,7 @@ public abstract class DriverManager {
 			
 			try {
 				Runtime.getRuntime().exec("taskkill /F /IM chromedriver.exe");
+				SeleniumUtils.pausa(2000L);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
