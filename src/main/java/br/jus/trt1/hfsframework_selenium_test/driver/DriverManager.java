@@ -1,5 +1,7 @@
 package br.jus.trt1.hfsframework_selenium_test.driver;
 
+import java.io.IOException;
+
 import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 
@@ -16,6 +18,13 @@ public abstract class DriverManager {
 		if (driver != null) {
 			driver.quit();
 			driver = null;
+			
+			try {
+				Runtime.getRuntime().exec("taskkill /F /IM chromedriver.exe");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	
