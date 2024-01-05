@@ -9,11 +9,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -37,6 +39,16 @@ public abstract class BasePage {
 
 	public BasePage(WebDriver driver) {
 		this.driver = driver;
+	}
+	
+	public void clicaElementoComJS(WebElement element) {
+		((JavascriptExecutor) driver).executeScript(
+				"arguments[0].click();", element);
+	}
+	
+	public void clicaElementoComActions(WebElement element) {
+		Actions action = new Actions(driver);
+		action.moveToElement(element).click().perform();
 	}
 	
 	/**
