@@ -115,10 +115,17 @@ public abstract class BasePage {
 	 * @param input o elemento da pagina.
 	 * @param texto o valor a ser preenchido no campo.
 	 */
-    public void preencheCampo(WebElement input, String texto) {
+    public void preencheInput(WebElement input, String texto) {
     	if (texto == null) texto = "";
     	input.clear();
     	input.sendKeys(texto);
+    }
+    
+    public void preencheTextArea(WebElement textArea, String texto) {
+    	if (texto == null) texto = "";
+    	textArea.click();
+    	textArea.clear();
+    	textArea.sendKeys(texto);
     }
     
 	/**
